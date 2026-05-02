@@ -6,9 +6,11 @@ import net.omaima.backend.entities.Customer;
 import net.omaima.backend.entities.SavingAccount;
 import net.omaima.backend.enums.AccountStatus;
 import net.omaima.backend.enums.OperationType;
+import net.omaima.backend.exceptions.CustomerNotFoundException;
 import net.omaima.backend.repositories.AccountOperationRepository;
 import net.omaima.backend.repositories.BankAccountRepository;
 import net.omaima.backend.repositories.CustomerRepository;
+import net.omaima.backend.services.BankAccountService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,6 +28,24 @@ public class BackendApplication {
     }
 
     @Bean
+    CommandLineRunner commandLineRunner(BankAccountService bankAccountService){
+        return args -> {
+            Stream.of("Hassan", "Imane", "Mohamed").forEach(name -> {
+                Customer customer = new Customer();
+                customer.setName(name);
+                customer.setEmail(name + "@gmail.com");
+                bankAccountService.saveCustomer(customer);
+            });
+            bankAccountService.listCustomers();
+        };
+
+        try {
+            bankAccountService.saveCurrentBankAccount(Math.random() * 90000, 9000, customer.getId());
+        } catch (CustomerNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //@Bean
     public CommandLineRunner start(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository, AccountOperationRepository accountOperationRepository) {
         return args -> {
             Stream.of("Omaima", "Soumia", "Hasna").forEach(name -> {
@@ -64,6 +84,8 @@ public class BackendApplication {
                     accountOperation.setBankAccount(acc);
                     accountOperationRepository.save(accountOperation);
                 }
+
+
             });
         };
     }
