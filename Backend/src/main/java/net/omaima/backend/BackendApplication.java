@@ -1,5 +1,6 @@
 package net.omaima.backend;
 
+import net.omaima.backend.dtos.CustomerDTO;
 import net.omaima.backend.entities.*;
 import net.omaima.backend.enums.AccountStatus;
 import net.omaima.backend.enums.OperationType;
@@ -31,10 +32,11 @@ public class BackendApplication {
     CommandLineRunner commandLineRunner(BankAccountService bankAccountService){
         return args -> {
             Stream.of("Hassan", "Imane", "Mohamed").forEach(name -> {
-                Customer customer = new Customer();
+                CustomerDTO customer = new CustomerDTO();
                 customer.setName(name);
                 customer.setEmail(name + "@gmail.com");
                 bankAccountService.saveCustomer(customer);
+
             });
             bankAccountService.listCustomers().forEach(customer->{
                 try {
