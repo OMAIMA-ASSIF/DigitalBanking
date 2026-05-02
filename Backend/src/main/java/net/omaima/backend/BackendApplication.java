@@ -36,14 +36,15 @@ public class BackendApplication {
                 customer.setEmail(name + "@gmail.com");
                 bankAccountService.saveCustomer(customer);
             });
-            bankAccountService.listCustomers();
+            bankAccountService.listCustomers().forEach(customer->{
+                try {
+                    bankAccountService.saveCurrentBankAccount(Math.random() * 90000, customer.getId(),9000);
+                    bankAccountService.saveSavingBankAccount(Math.random()*120000, customer.getId(),5.5);
+                } catch (CustomerNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         };
-
-        try {
-            bankAccountService.saveCurrentBankAccount(Math.random() * 90000, 9000, customer.getId());
-        } catch (CustomerNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
     //@Bean
     public CommandLineRunner start(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository, AccountOperationRepository accountOperationRepository) {

@@ -39,8 +39,8 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public CurrentAccount saveCurrentBankAccount(double initialBalance, Long CustomerId, double overDraft, Long customerId) throws CustomerNotFoundException {
-        Customer customer = customerRepository.findById(CustomerId).orElse(null); //si n existe pas retourner null
+    public CurrentAccount saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findById(customerId).orElse(null); //si n existe pas retourner null
         if (customer == null) {
             throw new CustomerNotFoundException("Customer not found");
         }
@@ -55,8 +55,8 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public SavingAccount saveSavingBankAccount(double initialBalance, Long CustomerId, double interestRate, Long customerId) throws CustomerNotFoundException {
-        Customer customer = customerRepository.findById(CustomerId).orElse(null); //si n existe pas retourner null
+    public SavingAccount saveSavingBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findById(customerId).orElse(null); //si n existe pas retourner null
         if (customer == null) {
             throw new CustomerNotFoundException("Customer not found");
         }
